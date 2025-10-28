@@ -1,37 +1,22 @@
-from sqlalchemy import (
-    Column, Integer, String, Boolean, ForeignKey, Text, Enum, 
-    TIMESTAMP, Float, BigInteger
-)
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
-from database import Base # Import Base from database.py
+# models.py - نسخه نهایی DashboardWidget
 
-# --- RBAC, Admin, and Auditing ---
-class Role(Base):
-    __tablename__ = 'roles'
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(50), unique=True, nullable=False)
-    permissions = relationship("RolePermission", back_populates="role", cascade="all, delete-orphan")
-    users = relationship("User", back_populates="role")
-
-class Permission(Base):
-    __tablename__ = 'permissions'
+class DashboardWidget(Base):
+    """ذخیره تنظیمات ویجت‌های سفارشی برای هر کاربر (ادمین یا کاربر نهایی)"""
+    __tablename__ = 'dashboard_widgets'
+    
     id = Column(Integer, primary_key=True)
-    name = Column(String(100), unique=True, nullable=False)
-
-class RolePermission(Base):
-    __tablename__ = 'role_permissions'
-    role_id = Column(Integer, ForeignKey('roles.id', ondelete='CASCADE'), primary_key=True)
-    permission_id = Column(Integer, ForeignKey('permissions.id', ondelete='CASCADE'), primary_key=True)
-    role = relationship("Role", back_populates="permissions")
-
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(50), unique=True, index=True, nullable=False)
-    hashed_password = Column(String(255), nullable=False)
-    role_id = Column(Integer, ForeignKey('roles.id'))
-    user_type = Column(Enum('admin', 'end_user', name='user_type_enum'), default='end_user', nullable=False)
-    role = relationship("Role", back_populates="users")
-
-# ... (Add all other models as defined in previous detailed answers)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    
+    # نوع ویجت، مثلا: 'live_traffic', 'cpu_status', 'user_internet_usage'
+    widget_type = Column(String(100), nullable=False) 
+    
+    # تنظیمات ویجت به صورت JSON (مثلاً ID دستگاه یا اینترفیس مورد نظر)
+    widget_config_json = Column(Text) 
+    
+    # اطلاعات موقعیت و اندازه در گرید
+    position_x = Column(Integer, nullable=False)
+    position_y = Column(Integer, nullable=False)
+    width = Column(Integer, nullable=False)
+    height = Column(Integer, nullable=False)
+    
+    user = relationship("User")
