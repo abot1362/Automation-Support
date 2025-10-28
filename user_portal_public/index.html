@@ -5,16 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Portal</title>
     
-    <!-- PWA additions -->
-    <link rel="manifest" href="/manifest.json">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#5e81ac"/>
+    <link rel="apple-touch-icon" href="/img/icons/user-192.png">
 
+    <!-- Stylesheets and Libraries -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <link rel="stylesheet" href="style.css">
     <script defer src="https://unpkg.com/lucide@latest/dist/lucide.js"></script>
 </head>
 <body>
-    <!-- ... your HTML body ... -->
+    <header class="container">
+        <nav>
+            <ul><li><strong id="page-title">Dashboard</strong></li></ul>
+            <ul><li><a href="#" id="logout-button" class="secondary outline">Logout</a></li></ul>
+        </nav>
+    </header>
+
+    <main id="app-content" class="container">
+        <!-- Page content will be loaded here by app.js -->
+        <div aria-busy="true">Loading initial page...</div>
+    </main>
+
+    <nav class="container" id="bottom-nav">
+        <a href="#dashboard" class="nav-item active" data-page-title="Dashboard">
+            <i data-lucide="layout-dashboard"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="#tickets" class="nav-item" data-page-title="Support Tickets">
+            <i data-lucide="life-buoy"></i>
+            <span>Tickets</span>
+        </a>
+        <a href="#chat" class="nav-item" data-page-title="Chat">
+            <i data-lucide="message-square"></i>
+            <span>Chat</span>
+        </a>
+        <a href="#access" class="nav-item" data-page-title="Remote Access">
+            <i data-lucide="monitor-dot"></i>
+            <span>Access</span>
+        </a>
+        <a href="#profile" class="nav-item" data-page-title="My Profile">
+            <i data-lucide="user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
