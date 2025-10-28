@@ -1,6 +1,47 @@
-body { padding-bottom: 80px; }
-#bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-around; background: var(--card-background-color); border-top: 1px solid var(--card-border-color); padding: 0.5rem 0; z-index: 1000; }
-.nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--muted-color); border: none; }
-.nav-item.active { color: var(--primary); }
-.nav-item span { font-size: 0.75rem; margin-top: 0.25rem; }
-main { margin-bottom: 2rem; }
+/* Custom styles for the User Portal PWA */
+body {
+    padding-bottom: 80px; /* Space for the bottom nav */
+    background-color: var(--pico-background-color);
+}
+
+#bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    background: var(--pico-card-background-color);
+    border-top: 1px solid var(--pico-card-border-color);
+    padding: 0.5rem 0;
+    z-index: 1000;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--pico-muted-color);
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--pico-border-radius);
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.nav-item.active {
+    color: var(--pico-primary);
+}
+
+.nav-item:hover {
+    background-color: var(--pico-muted-background-color);
+}
+
+.nav-item span {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+main#app-content {
+    margin-bottom: 2rem;
+}
