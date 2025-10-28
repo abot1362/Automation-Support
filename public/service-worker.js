@@ -1,57 +1,67 @@
 // public/service-worker.js
-
 const CACHE_NAME = 'admin-portal-cache-v1';
 const urlsToCache = [
   '/',
   '/index.html',
+  '/login.html',
   'https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css',
   'https://unpkg.com/lucide@latest/dist/lucide.js'
 ];
 
-// 1. Install Event: Cache the core assets
 self.addEventListener('install', event => {
-  console.log('Admin Service Worker: Install');
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Admin Service Worker: Caching app shell');
-        return cache.addAll(urlsToCache);
-      })
-  );
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)));
 });
 
-// 2. Fetch Event: Serve cached content when offline
 self.addEventListener('fetch', event => {
-  // We only handle GET requests
-  if (event.request.method !== 'GET') {
+  if (event.request.method !== 'GET' || event.request.url.startsWith('http://') ) {
     return;
   }
-  
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-
-        // Not in cache - fetch from network
-        return fetch(event.request);
-      }
-    )
+    caches.match(event.request).then(response => response || fetch(event.request))
   );
 });
 
-// 3. Push Event: Handle incoming push notifications
 self.addEventListener('push', event => {
-  console.log('Admin Service Worker: Push Received.');
   const data = event.data.json();
-  const title = data.title || 'Platform Notification';
-  const options = {
-    body: data.body,
-    icon: '/img/icons/admin-192.png',
-    badge: '/img/icons/admin-badge.png' // A smaller icon for the notification bar
-  };
-
+  const title = data.title || 'Platform Alert';
+  const options = { body: data.body, icon: '/img/icons/admin-192.png' };
   event.waitUntil(self.registration.showNotification(title, options));
-});
+});```
+
+#### **۶. فایل `public/index.html`**
+*   **مسیر:** `/public/index.html`
+
+```html
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Management Platform</title>
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#336699"/>
+    <!-- Styles & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <script defer src="https://unpkg.com/lucide@latest/dist/lucide.js"></script>
+    <style> /* ... (Styles from previous answers) ... */ </style>
+</head>
+<body>
+    <aside> <!-- ... (Full sidebar HTML from previous answers) ... --> </aside>
+    <main id="main-content"> <!-- ... (All page sections from previous answers) ... --> </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // PWA Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(() => console.log('Admin Service Worker Registered'));
+            }
+
+            // Your full SPA navigation and loader logic goes here
+            // (Full JS code from previous answers)
+        });
+    </script>
+</body>
+</html>
