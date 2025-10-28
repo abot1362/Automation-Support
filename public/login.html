@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>Login - Admin Portal</title>
+    <style>
+        body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        main { max-width: 400px; width: 100%; }
+        #error-message { color: var(--pico-color-red-500); display: none; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <article>
+            <h1 style="text-align: center;">Admin Portal Login</h1>
+            <form id="login-form">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Admin Username" required>
+                
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                
+                <button type="submit" id="submit-button">Login</button>
+            </form>
+            <p id="error-message"></p>
+        </article>
+    </main>
+    <script>
+        const form = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+        const submitButton = document.getElementById('submit-button');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            errorMessage.style.display = 'none';
+            submitButton.setAttribute('aria-busy', 'true');
+
+            const username = form.username.value;
+            const password = form.password.value;
+
+            try {
+                // The /token endpoint should handle different user_types
+                const response = await fetch('/token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, user_type: 'admin' })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Login failed.');
+                }
+
+                const data = await response.json();
+                localStorage.setItem('accessToken', data.access_token);
+                window.location.href = 'index.html';
+
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
+            } finally {
+                submitButton.removeAttribute('aria-busy');
+            }
+        });
+    </script>
+</body>
+</html>```
+
+---
+#### **۳. فایل `manifest.json`**
+*   **مسیر:** `public/manifest.json`
+
+```json
+{
+  "name": "Unified Platform - Admin Dashboard",
+  "short_name": "Admin Panel",
+  "description": "Central management platform for all infrastructure devices.",
+  "start_url": "/index.html?source=pwa",
+  "display": "standalone",
+  "background_color": "#11191f",
+  "theme_color": "#394046",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/img/icons/admin-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/img/icons/admin-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
