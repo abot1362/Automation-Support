@@ -33,3 +33,10 @@ apscheduler
 reportlab
 jinja2
 lxml
+
+# For LDAP / Active Directory
+python-ldap
+
+# For Kerberos (GSSAPI)
+pykerberos
+fastapi-kerberos
