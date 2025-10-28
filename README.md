@@ -45,5 +45,44 @@ This guide will walk you through setting up the entire platform for local develo
 ```bash
 git clone https://github.com/abot1362/Automation-Support
 cd Automation-Support
+# Unified Infrastructure Management Platform
 
+Welcome to the Unified Infrastructure Management Platform. This repository contains the source code for the entire platform, architected as a modern, decoupled system.
+
+## Project Structure
+
+This monorepo is organized into three main sub-projects:
+
+-   `./backend`: The **FastAPI (Python)** application that serves as the core API for the entire platform.
+-   `./frontend-admin`: The **Next.js (React)** application for the administrator's management dashboard.
+-   `./frontend-user`: The **Next.js (React)** Progressive Web App (PWA) for end-users.
+
+## Local Development Setup
+
+### Step 1: Backend Setup
+
+1.  Navigate to the backend directory: `cd backend`
+2.  Create and activate a Python virtual environment.
+3.  Install dependencies: `pip install -r requirements.txt`
+4.  Configure your local environment by creating a `.env` file from the example.
+5.  Set up the database and run migrations: `alembic upgrade head`
+6.  Run the backend server: `uvicorn main:app --reload --port 8000`
+
+### Step 2: Admin Frontend Setup
+
+1.  In a **new terminal**, navigate to the admin frontend directory: `cd frontend-admin`
+2.  Install dependencies: `npm install`
+3.  Run the development server: `npm run dev`
+    (The admin portal will be available at `http://localhost:3000`)
+
+### Step 3: User Frontend Setup
+
+1.  In a **third terminal**, navigate to the user frontend directory: `cd frontend-user`
+2.  Install dependencies: `npm install`
+3.  Run the development server: `npm run dev`
+    (The user portal will be available at `http://localhost:3001`)
+
+---
+
+This provides a complete and final structure for your project, ready for you to fill in the detailed logic for each component and API endpoint.
 
