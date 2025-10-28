@@ -1,13 +1,20 @@
+# FastAPI and Web Server
 fastapi[all]
 uvicorn
 gunicorn
+
+# Database
 sqlalchemy
 pymysql
 alembic
+
+# Configuration & Security
 pydantic[dotenv]
 passlib[bcrypt]
 python-jose[cryptography]
 python-multipart
+
+# Device Connectors
 routeros-api
 netmiko
 ncclient
@@ -17,6 +24,8 @@ docker
 pysnmp
 onvif-zeep
 wsdiscovery
+
+# Other Utilities
 requests
 httpx
 pywebpush
