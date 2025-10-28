@@ -4,80 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unified Management Platform</title>
+    
+    <!-- PWA additions -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#336699"/>
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <script defer src="https://unpkg.com/lucide@latest/dist/lucide.js"></script>
     <style>
-        :root { --sidebar-width: 260px; }
-        body { display: grid; grid-template-columns: var(--sidebar-width) 1fr; margin: 0; }
-        aside { height: 100vh; position: fixed; width: var(--sidebar-width); padding: 1.5rem; border-right: 1px solid var(--pico-muted-border-color); overflow-y: auto; }
-        main { padding: 1.5rem; grid-column: 2; }
-        aside h2 { margin-bottom: 1rem; }
-        aside nav a { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; padding: 0.5rem; border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-color);}
-        aside nav p { margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: bold; color: var(--pico-muted-color); }
-        .page { display: none; } .page.active { display: block; }
+        /* ... your styles ... */
     </style>
 </head>
 <body>
-    <aside>
-        <h2><i data-lucide="shield-check"></i> Unified Platform</h2>
-        <nav>
-            <a href="#dashboard"><i data-lucide="layout-dashboard"></i> Main Dashboard</a>
-            <p>Infrastructure</p>
-            <a href="#devices"><i data-lucide="server"></i> Device Management</a>
-            <a href="#virtualization"><i data-lucide="layers"></i> Virtualization</a>
-            <p>Network & Security</p>
-            <a href="#ppp-users"><i data-lucide="user-check"></i> Hotspot/VPN Users</a>
-            <a href="#web-filter"><i data-lucide="shield"></i> Web Filter</a>
-            <a href="#firewall-management"><i data-lucide="flame"></i> Firewall Management</a>
-            <p>Communications</p>
-            <a href="#telephony"><i data-lucide="phone"></i> Telephony</a>
-            <a href="#surveillance"><i data-lucide="video"></i> Surveillance</a>
-            <p>Analysis & Intelligence</p>
-            <a href="#network-map"><i data-lucide="git-merge"></i> Network Map</a>
-            <a href="#inventory"><i data-lucide="scan"></i> Network Inventory</a>
-            <a href="#reports"><i data-lucide="file-text"></i> Reports</a>
-            <a href="#assistant"><i data-lucide="brain-circuit"></i> AI Assistant</a>
-            <p>Administration</p>
-            <a href="#admin-users"><i data-lucide="users"></i> Admin Users</a>
-            <a href="#roles"><i data-lucide="shield-half"></i> Roles & Permissions</a>
-            <a href="#audit-log"><i data-lucide="history"></i> Audit Log</a>
-            <a href="#settings"><i data-lucide="settings"></i> System Settings</a>
-        </nav>
-    </aside>
+    <!-- ... your HTML body ... -->
     <main id="main-content">
-        <section id="dashboard" class="page active">
-             <h1>Welcome to the Main Dashboard</h1>
-             <p>Select a module from the sidebar to begin.</p>
-        </section>
-        <section id="devices" class="page"><h1>Device Management</h1></section>
-        <!-- Add a section for each nav item here -->
+        <!-- ... your page sections ... -->
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            const mainContent = document.getElementById('main-content');
             
-            function showPage(pageId) {
-                 if(mainContent.querySelector('.page.active')) {
-                    mainContent.querySelector('.page.active').classList.remove('active');
-                 }
-                 const newPage = document.getElementById(pageId);
-                 if (newPage) newPage.classList.add('active');
-                 else mainContent.querySelector('#dashboard').classList.add('active');
+            // --- PWA Service Worker Registration ---
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('Admin Service Worker registered successfully.');
+                        // After registration, you can ask for push notification permission
+                        // requestNotificationPermission(registration);
+                    })
+                    .catch(error => {
+                        console.error('Admin Service Worker registration failed:', error);
+                    });
             }
+            // ------------------------------------
 
-            document.querySelectorAll('aside nav a').forEach(link => {
-                link.addEventListener('click', e => {
-                    e.preventDefault();
-                    const pageId = new URL(link.href).hash.substring(1);
-                    showPage(pageId);
-                    window.history.pushState(null, '', `#${pageId}`);
-                });
-            });
-            
-            const initialPageId = window.location.hash.substring(1) || 'dashboard';
-            showPage(initialPageId);
+            // ... your existing navigation logic ...
         });
+
+        // You would also add functions here for push notification subscription
+        // async function requestNotificationPermission(registration) { ... }
     </script>
 </body>
 </html>
