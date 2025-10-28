@@ -1,0 +1,27 @@
+# This would be a string constant in your backend, e.g., in a utils file.
+
+MIKROTIK_WEB FILTER_SCRIPT = """
+:log info "WebFilter: Starting blacklist update..."
+
+# The URL will be dynamically inserted by the backend when installing the script
+:local blacklistUrl "http://YOUR_PLATFORM_DOMAIN/api/webfilter/export/1.txt"
+:local listName "Blocked_Domains_By_Platform"
+:local tempFileName "platform_blacklist.txt"
+
+/tool fetch url=\$blacklistUrl dst-path=\$tempFileName mode=http
+
+:if ([/file find name=\$tempFileName]~"") do={
+    :log info "WebFilter: New list downloaded."
+
+    # Remove old dynamic entries first
+    /ip firewall address-list remove [find where list=\$listName and dynamic=no]
+    
+    # Import new list
+    /ip firewall address-list import file-name=\$tempFileName list-name=\$listName
+    
+    /file remove \$tempFileName
+    :log info ("WebFilter: Address list '{0}' updated." , \$listName)
+} else={
+    :log error "WebFilter: Failed to download blacklist."
+}
+"""
