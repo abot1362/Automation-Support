@@ -5,44 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unified Management Platform</title>
     
-    <!-- PWA additions -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#336699"/>
-    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#394046"/>
+    <link rel="apple-touch-icon" href="/img/icons/admin-192.png">
+
+    <!-- Stylesheets & Libraries -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.min.css" />
     <script defer src="https://unpkg.com/lucide@latest/dist/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.min.js"></script>
+
     <style>
-        /* ... your styles ... */
+        :root { --sidebar-width: 260px; }
+        body { display: grid; grid-template-columns: var(--sidebar-width) 1fr; margin: 0; }
+        aside { height: 100vh; position: fixed; width: var(--sidebar-width); padding: 1.5rem; border-right: 1px solid var(--pico-muted-border-color); overflow-y: auto; }
+        main { padding: 1.5rem; grid-column: 2; }
+        aside h2 { margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;}
+        aside nav a { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; padding: 0.5rem; border-radius: var(--pico-border-radius); text-decoration: none; color: var(--pico-color);}
+        aside nav a.active { background-color: var(--pico-primary-background); color: var(--pico-primary-inverse); }
+        aside nav p { margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: bold; color: var(--pico-muted-color); font-size: 0.9em; }
+        .page { display: none; } .page.active { display: block; }
+        dialog article { width: 80vw; max-width: 900px; }
     </style>
 </head>
 <body>
-    <!-- ... your HTML body ... -->
+    <aside>
+        <h2><i data-lucide="shield-check"></i> Unified Platform</h2>
+        <nav>
+            <a href="#dashboard" class="nav-link"><i data-lucide="layout-dashboard"></i> Main Dashboard</a>
+            
+            <p>Infrastructure</p>
+            <a href="#devices" class="nav-link"><i data-lucide="server"></i> Device Management</a>
+            <a href="#virtualization" class="nav-link"><i data-lucide="layers"></i> Virtualization</a>
+            
+            <p>Network & Security</p>
+            <a href="#ppp-users" class="nav-link"><i data-lucide="user-check"></i> Hotspot/VPN Users</a>
+            <a href="#web-filter" class="nav-link"><i data-lucide="shield"></i> Web Filter</a>
+            <a href="#firewall" class="nav-link"><i data-lucide="flame"></i> Firewall Management</a>
+            
+            <p>Communications</p>
+            <a href="#telephony" class="nav-link"><i data-lucide="phone"></i> Telephony</a>
+            <a href="#surveillance" class="nav-link"><i data-lucide="video"></i> Surveillance</a>
+            
+            <p>Analysis & Intelligence</p>
+            <a href="#network-map" class="nav-link"><i data-lucide="git-merge"></i> Network Map</a>
+            <a href="#inventory" class="nav-link"><i data-lucide="scan"></i> Network Inventory</a>
+            <a href="#reports" class="nav-link"><i data-lucide="file-text"></i> Reports</a>
+            <a href="#assistant" class="nav-link"><i data-lucide="brain-circuit"></i> AI Assistant</a>
+
+            <p>Administration</p>
+            <a href="#admin-users" class="nav-link"><i data-lucide="users"></i> Admin Users</a>
+            <a href="#roles" class="nav-link"><i data-lucide="shield-half"></i> Roles & Permissions</a>
+            <a href="#audit-log" class="nav-link"><i data-lucide="history"></i> Audit Log</a>
+            <a href="#settings" class="nav-link"><i data-lucide="settings"></i> System Settings</a>
+        </nav>
+    </aside>
+
     <main id="main-content">
-        <!-- ... your page sections ... -->
+        <!-- All page sections are defined here, but initially hidden -->
+        <section id="dashboard" class="page"><h1>Main Dashboard</h1><p>Welcome! This is your central overview.</p></section>
+        <section id="devices" class="page"><h1>Device Management</h1></section>
+        <section id="virtualization" class="page"><h1>Virtualization</h1></section>
+        <section id="ppp-users" class="page"><h1>Hotspot/VPN Users</h1></section>
+        <section id="web-filter" class="page"><h1>Web Filter</h1></section>
+        <section id="firewall" class="page"><h1>Firewall Management</h1></section>
+        <section id="telephony" class="page"><h1>Telephony</h1></section>
+        <section id="surveillance" class="page"><h1>Surveillance</h1></section>
+        <section id="network-map" class="page"><h1>Network Map</h1></section>
+        <section id="inventory" class="page"><h1>Network Inventory</h1></section>
+        <section id="reports" class="page"><h1>Reports</h1></section>
+        <section id="assistant" class="page"><h1>AI Assistant</h1></section>
+        <section id="admin-users" class="page"><h1>Admin Users</h1></section>
+        <section id="roles" class="page"><h1>Roles & Permissions</h1></section>
+        <section id="audit-log" class="page"><h1>Audit Log</h1></section>
+        <section id="settings" class="page"><h1>System Settings</h1></section>
     </main>
+
     <script>
+        // Full SPA navigation logic and content loaders will go here.
+        // This is a simplified version for structure.
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            
-            // --- PWA Service Worker Registration ---
+
+            // PWA Service Worker Registration
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/service-worker.js')
-                    .then(registration => {
-                        console.log('Admin Service Worker registered successfully.');
-                        // After registration, you can ask for push notification permission
-                        // requestNotificationPermission(registration);
-                    })
-                    .catch(error => {
-                        console.error('Admin Service Worker registration failed:', error);
-                    });
+                    .then(() => console.log('Admin Service Worker Registered'));
             }
-            // ------------------------------------
+            
+            const mainContent = document.getElementById('main-content');
+            
+            function showPage(pageId) {
+                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                 const newPage = document.getElementById(pageId);
+                 if (newPage) {
+                    newPage.classList.add('active');
+                 } else {
+                    document.getElementById('dashboard').classList.add('active');
+                 }
 
-            // ... your existing navigation logic ...
+                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                 const activeLink = document.querySelector(`.nav-link[href="#${pageId}"]`);
+                 if(activeLink) activeLink.classList.add('active');
+            }
+
+            function handleNavigation() {
+                const pageId = window.location.hash.substring(1) || 'dashboard';
+                showPage(pageId);
+                // In a full app, you would call a specific loader function here, e.g., loadDashboardPage();
+            }
+
+            document.querySelectorAll('aside nav a').forEach(link => {
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    window.location.hash = new URL(link.href).hash;
+                });
+            });
+
+            window.addEventListener('hashchange', handleNavigation);
+            handleNavigation(); // Initial page load
         });
-
-        // You would also add functions here for push notification subscription
-        // async function requestNotificationPermission(registration) { ... }
     </script>
 </body>
 </html>
