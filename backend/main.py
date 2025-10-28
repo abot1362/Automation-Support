@@ -36,3 +36,8 @@ def health_check():
     return {"status": "ok", "message": "Backend API is alive!"}
 
 # Note: The StaticFiles mounts are removed as Next.js will handle the frontend.
+# backend/main.py
+# from fastapi_kerberos import KerberosMiddleware, KerberosConfig
+
+# config = KerberosConfig(service="HTTP@your-server-hostname.mycorp.local")
+# app.add_middleware(KerberosMiddleware, config=config)
